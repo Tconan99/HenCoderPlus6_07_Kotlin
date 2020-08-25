@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        et_username.setText(CacheUtils.get(usernameKey))
-        et_password.setText(CacheUtils.get(passwordKey))
+        et_username.setText(CacheUtils[usernameKey])
+        et_password.setText(CacheUtils[passwordKey])
         btn_login.setOnClickListener(this)
         code_view.setOnClickListener(this)
     }
@@ -37,6 +37,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val password = et_password!!.text.toString()
         val code = et_code!!.text.toString()
         val user = User(username, password, code)
+
+        fun verify(user: User): Boolean {
+            if (user.username?.length ?: 0 < 4) {
+                Utils.toast("用户名不合法")
+                return false
+            }
+
+            if (user.password?.length ?: 0 < 4) {
+                Utils.toast("密码不合法")
+                return false
+            }
+            return true
+        }
+
         if (verify(user)) {
             CacheUtils.save(usernameKey, username)
             CacheUtils.save(passwordKey, password)
@@ -44,15 +58,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun verify(user: User): Boolean {
-        if (user.username != null && user.username!!.length < 4) {
-            Utils.toast("用户名不合法")
-            return false
-        }
-        if (user.password != null && user.password!!.length < 4) {
-            Utils.toast("密码不合法")
-            return false
-        }
-        return true
-    }
+
 }

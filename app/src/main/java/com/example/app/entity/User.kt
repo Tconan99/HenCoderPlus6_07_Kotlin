@@ -1,3 +1,3 @@
 package com.example.app.entity
 
-class User(var username: String?, var password: String?, var code: String?)
+data class User @JvmOverloads constructor(var username: String? = null, var password: String? = null, var code: String? = null)
